@@ -14,11 +14,12 @@ Lets say that our root domain is `example.com` and `en.example.com` is a subdoma
 
 #### Folder structure
 The the domain root is `/var/www` (in-container folder), the data should follow the structure `/var/www/subdomainname/html/subdomaindata`, for ex.:
-```/var/www/
+```
+/var/www/
 ├── en/html/
 │   ├── index.html.gz
 │   ├── lorem_ipsum.html.gz
-│   ├── supergood/
+│   ├── awesome/
 │   │   ├── index.html.gz
 │   │   │── a_primate_s_memoir.html.gz
 │   │   └── .../
@@ -27,7 +28,8 @@ The the domain root is `/var/www` (in-container folder), the data should follow 
 │   ├── index.html.gz
 │   ├── thispagedoesntexist.html.gz
 │   └── .../
-└── .../```
+└── .../
+```
 
 ### Environment variable options:
 1. `DOMAIN`: website root domain, required.
