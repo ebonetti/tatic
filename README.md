@@ -1,5 +1,5 @@
 ## NGINX static gzipped file server
-This project leverages [NGINX docker image](https://hub.docker.com/_/nginx) and [H5BP configs](https://github.com/h5bp/server-configs-nginx) to provide a plug and play static gzipped file server. It comes with subdomain capabilities and fallback for missing pages.
+This project leverages [NGINX docker image](https://hub.docker.com/_/nginx) and [H5BP configs](https://github.com/h5bp/server-configs-nginx) to provide a plug and play static gzipped file server with subdomain capabilities.
 
 ### Description of configuration
 #### Domain redirects
@@ -8,9 +8,9 @@ Lets say that our root domain is `example.com` and `en.example.com` is a subdoma
 2. `www.en.example.com` to `en.example.com`.
 
 #### Page handling defaults
-1. (Folder index)[nginx.org/en/docs/http/ngx_http_index_module.html] is `index.html`.
-2. (Missing page)[http://nginx.org/en/docs/http/ngx_http_core_module.html#error_page] is `/thispagedoesntexist.html`, as such should be present in the fallback folder (and eventually overriden in some subdomains).
-3. Fallback subdomain is `www`, customizable: lets say that a page can't be found in a subdomain - for ex. `en.example.com/thispagedoesntexist.html` - NGINX search for it in the fallback subdomain/folder - `www.example.com/thispagedoesntexist.html`.
+1. Folder index is `index.html`.
+2. (Missing page)[http://nginx.org/en/docs/http/ngx_http_core_module.html#error_page] should be `/thispagedoesntexist.html`, otherwise default NGINX 404 page is returned.
+3. An URL without a page extension is valid, for ex. `www.example.com/index`
 
 #### Folder structure
 The the domain root is `/var/www` (in-container folder), the data should follow the structure `/var/www/subdomainname/html/subdomaindata`, for ex.:
@@ -18,10 +18,11 @@ The the domain root is `/var/www` (in-container folder), the data should follow 
 /var/www/
 ├── en/html/
 │   ├── index.html.gz
-│   ├── lorem_ipsum.html.gz
+│   ├── thispagedoesntexist.html.gz
+│   ├── loremipsum.html.gz
 │   ├── awesome/
 │   │   ├── index.html.gz
-│   │   │── a_primate_s_memoir.html.gz
+│   │   │── a_primatesmemoir.html.gz
 │   │   └── .../
 │   └── .../
 ├── www/html/
@@ -31,14 +32,9 @@ The the domain root is `/var/www` (in-container folder), the data should follow 
 └── .../
 ```
 
-### Environment variable options:
-1. `DOMAIN`: website root domain, required.
-2. `FALLBACK`: subdomain to use as a fallback, default `www`.
-Note: setting both varibles requires the following syntax `docker run -e DOMAIN=example.com -e FALLBACK=myfallback ...`
-
 ### Examples
-1. `docker run -e DOMAIN=example.com -v /path/2/your/dir:/var/www:ro -p 80 ebonetti/tatic`: basic usage, run the image using the domain `example.com`, [mount as a read-only volume](https://docs.docker.com/storage/volumes/) the host website folder `/path/2/your/dir` to the guest `/var/www` folder and expose the `http` port.
-2. `docker run -e DOMAIN=example.com -v /path/2/your/dir:/var/www:ro -p 80 --name nginx_server --restart always --log-opt max-size=10m --log-opt max-file=10 ebonetti/tatic`: run the image as before, naming the container `nginx_server`, adding the autorestart capability and log rotation. **You may want to use this commad.**
+1. `docker run -e DOMAIN=example.com -v /path/2/your/dir:/var/www:ro -p 80:80 ebonetti/tatic`: basic usage, run the image using the domain `example.com`, [mount as a read-only volume](https://docs.docker.com/storage/volumes/) the host website folder `/path/2/your/dir` to the guest `/var/www` folder and expose the `http` port.
+2. `docker run -e DOMAIN=example.com -v /path/2/your/dir:/var/www:ro -p 80:80 --name nginx_server --restart always --log-opt max-size=10m --log-opt max-file=10 ebonetti/tatic`: run the image as before, naming the container `nginx_server`, adding the autorestart capability and log rotation. **You may want to use this commad.**
 
 ### Useful commands
 1. `docker pull ebonetti/tatic` Update the image to the last revision.

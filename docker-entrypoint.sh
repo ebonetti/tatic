@@ -9,8 +9,8 @@ if [ ! -f "$FILE" ]; then
         echo "No domain specified, use the DOMAIN variable: docker run -e DOMAIN=example.com ...";
         exit;
     fi
-    export  example_com=$DOMAIN example__com=${DOMAIN//./\\.} fallback=${FALLBACK:-"www"};
-    envsubst '$example_com,$example__com,$fallback' < /etc/nginx/conf.d/templates/static.conf > $FILE;
+    export  example_com=$DOMAIN example__com=${DOMAIN//./\\.};
+    envsubst '$example_com,$example__com' < /etc/nginx/conf.d/templates/static.conf > $FILE;
 fi
 
 exec "$@"
