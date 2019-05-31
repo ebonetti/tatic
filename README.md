@@ -33,8 +33,8 @@ The the domain root is `/var/www` (in-container folder), the data should follow 
 ```
 
 ### Examples
-1. `docker run -e DOMAIN=example.com -v /path/2/your/dir:/var/www:ro -p 80:80 ebonetti/tatic`: basic usage, run the image using the domain `example.com`, [mount as a read-only volume](https://docs.docker.com/storage/volumes/) the host website folder `/path/2/your/dir` to the guest `/var/www` folder and expose the `http` port.
-2. `docker run -e DOMAIN=example.com -v /path/2/your/dir:/var/www:ro -p 80:80 --name nginx_server --restart always --log-opt max-size=10m --log-opt max-file=10 ebonetti/tatic`: run the image as before, naming the container `nginx_server`, adding the autorestart capability and log rotation. **You may want to use this commad.**
+1. `docker run -d -e DOMAIN=example.com -v /path/2/your/dir:/var/www:ro -p 80:80 ebonetti/tatic`: basic usage, run the image using the domain `example.com`, [mount as a read-only volume](https://docs.docker.com/storage/volumes/) the host website folder `/path/2/your/dir` to the guest `/var/www` folder and expose the `http` port.
+2. `docker run -d -e DOMAIN=example.com -v /path/2/your/dir:/var/www:ro -p 80:80 --name nginx_server --restart always --log-opt max-size=10m --log-opt max-file=10 ebonetti/tatic`: run the image as before, naming the container `nginx_server`, adding the autorestart capability and log rotation. **You may want to use this commad.**
 
 ### Useful commands
 1. `docker pull ebonetti/tatic` Update the image to the last revision.
