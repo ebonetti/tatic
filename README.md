@@ -22,7 +22,7 @@ The the domain root is `/var/www` (in-container folder), the data should follow 
 │   ├── loremipsum.html.gz
 │   ├── awesome/
 │   │   ├── index.html.gz
-│   │   │── a_primatesmemoir.html.gz
+│   │   │── aprimatesmemoir.html.gz
 │   │   └── .../
 │   └── .../
 ├── www/html/

@@ -10,7 +10,11 @@ COPY static.conf server-configs-nginx/conf.d/templates/
 
 #Install Nginx config
 FROM nginx
-RUN rm -fr /etc/nginx/
+RUN set -eux; \
+    rm -fr /etc/nginx/; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+      inotify-tools;
 COPY --from=downloader server-configs-nginx /etc/nginx
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
