@@ -8,21 +8,16 @@ RUN set -eux; \
       ca-certificates; \
     git clone https://github.com/h5bp/server-configs-nginx.git .; \
     sed -i /\ keepalive_timeout\ /s/^/\ \ #/ nginx.conf; \
-    mv conf.d/.default.conf conf.d/ssl.default.conf; \
-    mkdir certs; \
-    openssl req -x509 -nodes -newkey rsa:1024 \
-        -keyout certs/default.key \
-        -out certs/default.crt \
-        -subj '/CN=localhost';
+    mv conf.d/.default.conf conf.d/ssl.default.conf;
 COPY static.conf conf.d/templates/
 
 #Install Nginx config
 FROM nginx
 RUN set -eux; \
-    rm -fr /etc/nginx/; \
     apt-get update; \
-    apt-get install -y --no-install-recommends \
-      inotify-tools;
+    apt-get install -y --no-install-recommends inotify-tools; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/ /etc/nginx/;
 COPY --from=downloader /server-configs-nginx /etc/nginx
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]

@@ -6,8 +6,8 @@ CONFIG=/etc/nginx/conf.d/default.conf
 if [ ! -f "$CONFIG" ]; then
     if [ -z "$DOMAIN" ]
     then
-        echo "No domain specified, use the DOMAIN variable: docker run -e DOMAIN=example.com ...";
-        exit;
+        echo "No domain specified, use the DOMAIN variable";
+        exit 1;
     fi
     export  example_com=$DOMAIN example__com=${DOMAIN//./\\.};
     envsubst '$example_com,$example__com' < /etc/nginx/conf.d/templates/static.conf > $CONFIG;
