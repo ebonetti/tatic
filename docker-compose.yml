@@ -1,0 +1,34 @@
+#One way to use this:
+#curl https://raw.githubusercontent.com/ebonetti/tatic/master/docker-compose.yml | DOMAIN=example.com EMAIL=email@example.com PATH2DATA=/var/www docker-compose -f - config | tee docker-compose.yml
+version: '3'
+services:
+  certbot:
+    image: ebonetti/certbot-integration
+    #restart: unless-stopped
+    environment:
+      - DOMAIN=${DOMAIN}
+      - EMAIL=${EMAIL}
+    volumes:
+      - website-data:/var/www-website-data/:ro
+      - certificates:/etc/letsencrypt/live/${DOMAIN}/
+      - acme-challenge:/var/www/
+  nginx:
+    image: ebonetti/tatic
+    #restart: unless-stopped
+    environment:
+      - DOMAIN=${DOMAIN}
+    volumes:
+      - website-data:/var/www/:ro
+      - certificates:/etc/nginx/certs/:ro
+      - acme-challenge:/var/www-acme-challenge/:ro
+    ports:
+      - 80:80
+      - 443:443
+volumes:
+  certificates:
+  acme-challenge:
+  website-data:
+    driver: local
+    driver_opts:
+      device: ${PATH2DATA}
+      o: bind
