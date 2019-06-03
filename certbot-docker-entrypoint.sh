@@ -27,11 +27,16 @@ rm -fr $ACME/*;
 #Wait for a stable set of subdomains
 while [ $(inotifywait -t 5 -q -e move -e move_self -e create /var/www > /dev/null 2>1; echo $?) != 2 ]; do :; done;
 
-#Ignore eventual subdomains
-#expand
-#on fail new
-mkdir -p $ACME/.well-known/acme-challenge;
-curl -s https://www.example.com > $ACME/.well-known/acme-challenge/index.html;
+#Ignore eventual subdomains not connected
+#expand on an existing certificate
+#if everithing else fails request a new certificate
+echo "Started certbot";
+certonly --webroot -w /var/www-acme-challenge/ \
+    --rsa-key-size 4096 --agree-tos --force-renewal \
+    --cert-name $DOMAIN --email $EMAIL \
+    -d www.$DOMAIN \
+    --staging;
+echo;
 
 #Exit on changes to website data or timeout
 inotifywait -t 43200 -q -e move -e move_self -e create /var/www;
