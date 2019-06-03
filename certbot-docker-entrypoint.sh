@@ -31,7 +31,7 @@ while [ $(inotifywait -t 5 -q -e move -e move_self -e create /var/www > /dev/nul
 #expand on an existing certificate
 #if everithing else fails request a new certificate
 echo "Started certbot";
-certonly --webroot -w /var/www-acme-challenge/ \
+certbot certonly --webroot -w /var/www-acme-challenge/ \
     --rsa-key-size 4096 --agree-tos --force-renewal \
     --cert-name $DOMAIN --email $EMAIL \
     -d www.$DOMAIN \
