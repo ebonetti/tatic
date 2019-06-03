@@ -8,6 +8,7 @@ services:
     environment:
       - DOMAIN=${DOMAIN}
       - EMAIL=${EMAIL}
+      - CERT=/etc/letsencrypt/live/${DOMAIN}
     volumes:
       - website-data:/var/www/:ro
       - certificates:/etc/letsencrypt/

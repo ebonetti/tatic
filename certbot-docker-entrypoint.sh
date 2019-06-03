@@ -11,23 +11,35 @@ fi;
 #Wait for a stable set of subdomains
 while [ $(inotifywait -t 10 -q -e move -e move_self -e create /var/www/ > /dev/null 2>1; echo $?) != 2 ]; do :; done;
 
-domains=""
-for subdomain in $(ls /var/www/); do
-  domains="$domains -d $subdomain.$DOMAIN"
-done
+domains="$DOMAIN"
+for sub in $(ls /var/www/); do
+  domains="$domains,$sub.$DOMAIN"
+done;
 
-echo "Domains: $domains"
-
-#Ignore eventual subdomains not connected --allow-subset-of-names
-#expand on an existing certificate --expand
-#if everithing else fails request a new certificate
-#--hsts --auto-hsts --uir
-certbot certonly --non-interactive --force-renewal \
-  --rsa-key-size 4096 --must-staple --staple-ocsp --redirect \
-  --webroot -w /var/www-acme-challenge/ \
-  --cert-name $DOMAIN $domains \
+#--hsts --auto-hsts --uir --redirect
+if [ !-f "$CERT/fullchain.pem" ] || [ !-f "$CERT/privkey.pem" ]; then
+  echo "New certificate"
+  echo
+  certbot certonly --non-interactive --force-renewal \
+    --rsa-key-size 4096 --must-staple --staple-ocsp  \
+    --webroot -w /var/www-acme-challenge/ --cert-name $DOMAIN\
+    --domains $domains --allow-subset-of-names \
+    --staging \
+    --email $EMAIL --agree-tos || true;
+elif [ $(certbot certonly --non-interactive --force-renewal \
+  --rsa-key-size 4096 --must-staple --staple-ocsp  \
+  --webroot -w /var/www-acme-challenge/ --cert-name $DOMAIN\
+  --domains $domains --allow-subset-of-names \
   --staging \
-  --email $EMAIL --agree-tos || echo "Exit code: $?";
+  --email $EMAIL --agree-tos || echo "$?") = 0 ]; then
+  echo "Expanded certificate"
+  echo
+else
+  echo "Refreshing certificate"
+  echo
+  certbot renew;
+fi;
 
 #Exit on changes to website data or timeout
-inotifywait -t 43200 -e move -e move_self -e create /var/www/;
+#inotifywait -qq -t 43200 -e move -e move_self -e create /var/www/;
+inotifywait -qq -t 120 -e move -e move_self -e create /var/www/;
