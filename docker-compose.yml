@@ -10,16 +10,17 @@ services:
       - EMAIL=${EMAIL}
     volumes:
       - website-data:/var/www/:ro
-      - certificates:/etc/letsencrypt/live/${DOMAIN}/
+      - certificates:/etc/letsencrypt/
       - acme-challenge:/var/www-acme-challenge/
   nginx:
     image: ebonetti/tatic
     restart: unless-stopped
     environment:
       - DOMAIN=${DOMAIN}
+      - CERT=/etc/letsencrypt/live/${DOMAIN}
     volumes:
       - website-data:/var/www/:ro
-      - certificates:/etc/nginx/certs/:ro
+      - certificates:/etc/letsencrypt/:ro
       - acme-challenge:/var/www-acme-challenge/:ro
     ports:
       - 80:80
