@@ -8,7 +8,7 @@ RUN set -eux; \
       ca-certificates; \
     git clone https://github.com/h5bp/server-configs-nginx.git .; \
     sed -i /\ keepalive_timeout\ /s/^/\ \ #/ nginx.conf;
-COPY static.conf dummy.conf conf.d/templates/
+COPY static.conf conf.d/templates/
 
 #Install Nginx config
 FROM nginx
