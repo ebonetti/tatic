@@ -17,7 +17,7 @@ for sub in $(ls /var/www/); do
 done;
 
 #--hsts --auto-hsts --uir --redirect
-if [ !-f "$CERT/fullchain.pem" ] || [ !-f "$CERT/privkey.pem" ]; then
+if [ ! -f "$CERT/fullchain.pem" ] || [ ! -f "$CERT/privkey.pem" ]; then
   echo "New certificate"
   echo
   certbot certonly --non-interactive --force-renewal \
