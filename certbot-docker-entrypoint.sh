@@ -26,13 +26,13 @@ if [ ! -f "$CERT/fullchain.pem" ] || [ ! -f "$CERT/privkey.pem" ]; then
     --domains $domains --allow-subset-of-names \
     --staging \
     --email $EMAIL --agree-tos || true;
-elif [ certbot certonly --non-interactive --force-renewal \
+elif certbot certonly --non-interactive --force-renewal \
   --rsa-key-size 4096 --must-staple --staple-ocsp  \
   --webroot -w /var/www-acme-challenge/ --cert-name $DOMAIN\
   --domains $domains --allow-subset-of-names \
   --staging \
-  --email $EMAIL --agree-tos ]; then
-  echo "Expanding certificate"
+  --email $EMAIL --agree-tos; then
+  echo "Expand certificate"
   echo
 else
   echo "Refreshing certificate"
