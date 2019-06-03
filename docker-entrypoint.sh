@@ -18,18 +18,17 @@ else
 fi;
 
 if [ "$1" = 'nginx' ]; then
-    while [ ! -d "$CERT" ]; do
+    while [ ! -f "$CERT/fullchain.pem" ] || [ ! -f "$CERT/privkey.pem" ]; do
         sleep 1;
     done;
     template2conf static.conf
+    nginx -s reload;
 
-    #Reload nginx in case of a certification change
-    while true; do
+    inotifywait -m -e modify -e close_write -e move -e move_self -e create $CERT | while read -s; do
+    while read -s -t 10; do :; done;
         if [ -f "$CERT/fullchain.pem" ] && [ -f "$CERT/privkey.pem" ]; then
             nginx -s reload;
         fi;
-        inotifywait -qq -e modify -e close_write -e move -e move_self -e create $CERT || true;
-        while [ $(inotifywait -qq --timeout 10 $CERT > /dev/null 2>1; echo $?) != 2 ]; do :; done;
     done;
 fi &
 
