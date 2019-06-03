@@ -4,17 +4,17 @@ version: '3'
 services:
   certbot:
     image: ebonetti/certbot-integration
-    #restart: unless-stopped
+    restart: unless-stopped
     environment:
       - DOMAIN=${DOMAIN}
       - EMAIL=${EMAIL}
     volumes:
-      - website-data:/var/www-website-data/:ro
+      - website-data:/var/www/:ro
       - certificates:/etc/letsencrypt/live/${DOMAIN}/
-      - acme-challenge:/var/www/
+      - acme-challenge:/var/www-acme-challenge/
   nginx:
     image: ebonetti/tatic
-    #restart: unless-stopped
+    restart: unless-stopped
     environment:
       - DOMAIN=${DOMAIN}
     volumes:
