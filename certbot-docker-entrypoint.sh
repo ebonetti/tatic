@@ -20,12 +20,19 @@ done
 #expand on an existing certificate --expand
 #if everithing else fails request a new certificate
 #--hsts --auto-hsts --uir
+# certbot certonly --non-interactive --force-renewal \
+#     --rsa-key-size 4096 --must-staple --staple-ocsp --redirect \
+#     --webroot -w /var/www-acme-challenge/ \
+#     --cert-name $DOMAIN $domains \
+#     --staging \
+#     --email $EMAIL --agree-tos || echo "Exit code: $?";
+
 certbot certonly --non-interactive --force-renewal \
     --rsa-key-size 4096 --must-staple --staple-ocsp --redirect \
-    --webroot -w /var/www-acme-challenge/ \
+    --standalone \
     --cert-name $DOMAIN $domains \
     --staging \
     --email $EMAIL --agree-tos || echo "Exit code: $?";
 
 #Exit on changes to website data or timeout
-inotifywait -t 43200 -e move -e move_self -e create /var/www/;
+inotifywait -t 43200 -qq -e move -e move_self -e create /var/www/;

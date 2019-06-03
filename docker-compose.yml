@@ -12,6 +12,8 @@ services:
       - website-data:/var/www/:ro
       - certificates:/etc/letsencrypt/
       - acme-challenge:/var/www-acme-challenge/
+    ports:
+      - 80:80
   nginx:
     image: ebonetti/tatic
     restart: unless-stopped
