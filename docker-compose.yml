@@ -1,5 +1,3 @@
-#One way to use this:
-#curl https://raw.githubusercontent.com/ebonetti/tatic/master/docker-compose.yml | DOMAIN=example.com EMAIL=email@example.com PATH2DATA=/var/www docker-compose -f - config | tee docker-compose.yml
 version: '3'
 services:
   certbot:
