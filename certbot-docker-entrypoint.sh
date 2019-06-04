@@ -9,13 +9,11 @@ if [ -n '"$@"' ]; then
 fi;
 
 #Check environvent variables
-if [ -z "$DOMAIN" ]
-then
+if [ -z "$DOMAIN" ]; then
     echo "No domain specified";
     exit 1;
 fi
-if [ -z "$EMAIL" ]
-then
+if [ -z "$EMAIL" ]; then
     echo "No email specified";
     exit 1;
 fi
@@ -28,7 +26,6 @@ function certbot_certonly {
   certbot certonly --non-interactive --force-renewal --allow-subset-of-names --expand \
     --rsa-key-size 4096 --must-staple --staple-ocsp --hsts --uir \
     --webroot -w /var/www-acme-challenge/ --cert-name $DOMAIN --domains $domains \
-    --staging \
     --email $EMAIL --agree-tos;
 }
 
