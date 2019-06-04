@@ -18,7 +18,7 @@ function certbot_certonly {
     --webroot -w /var/www-acme-challenge/ --cert-name $DOMAIN\
     --domains $domains --allow-subset-of-names --expand\
     --staging \
-    --email $EMAIL --agree-tos;
+    --email $EMAIL --agree-tos || echo "Exit status: $?";
 }
 
 #Monitor changes in subdomains
