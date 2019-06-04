@@ -11,12 +11,11 @@ fi;
 function certbot_certonly {
   domains="$DOMAIN"
   for sub in $(ls /var/www/); do
-    domains="$domains,$sub.$DOMAIN"
+    domains="$domains,$sub.$DOMAIN,www.$sub.$DOMAIN"
   done;
-  certbot certonly --non-interactive --force-renewal \
-    --rsa-key-size 4096 --must-staple --staple-ocsp  \
-    --webroot -w /var/www-acme-challenge/ --cert-name $DOMAIN\
-    --domains $domains --allow-subset-of-names --expand\
+  certbot certonly --non-interactive --force-renewal --allow-subset-of-names --expand \
+    --rsa-key-size 4096 --must-staple --staple-ocsp --hsts --uir \
+    --webroot -w /var/www-acme-challenge/ --cert-name $DOMAIN --domains $domains \
     --staging \
     --email $EMAIL --agree-tos;
 }

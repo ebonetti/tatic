@@ -15,7 +15,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "5k"
+        max-size: "100k"
         max-file: "10"
   nginx:
     image: ebonetti/tatic
