@@ -15,7 +15,7 @@ This configuration redirects HTTP requests to their HTTPS counterpart.
 
 #### Page handling defaults
 1. Folder index is `index.html`.
-2. (Missing page)[http://nginx.org/en/docs/http/ngx_http_core_module.html#error_page] should be `/thispagedoesntexist.html`, otherwise default NGINX 404 page is returned.
+2. [Missing page](http://nginx.org/en/docs/http/ngx_http_core_module.html#error_page) should be `/thispagedoesntexist.html`, otherwise default NGINX 404 page is returned.
 3. An URL without a page extension is valid, for ex. `www.example.com/index`
 
 #### Folder structure
