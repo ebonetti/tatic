@@ -22,11 +22,11 @@ function certbot_certonly {
 }
 
 #Monitor changes in subdomains
-inotifywait -m -e move -e create /var/www/ | while read -s; do
+inotifywait -qm -e move -e create /var/www/ | while read -s; do
   while read -s -t 60; do :; done;
   certbot_certonly;
 done &
 
 certbot_certonly;
 
-while :; do certbot renew; sleep 12h & wait $${!}; done;
+while :; do sleep 12h; certbot renew; done;

@@ -24,7 +24,7 @@ if [ "$1" = 'nginx' ]; then
     template2conf static.conf
     nginx -s reload;
 
-    inotifywait -m -e modify -e close_write -e move -e move_self -e create $CERT | while read -s; do
+    inotifywait -qm -e modify -e close_write -e move -e move_self -e create $CERT | while read -s; do
     while read -s -t 10; do :; done;
         if [ -f "$CERT/fullchain.pem" ] && [ -f "$CERT/privkey.pem" ]; then
             nginx -s reload;
