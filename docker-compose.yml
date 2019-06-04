@@ -8,11 +8,15 @@ services:
     environment:
       - DOMAIN=${DOMAIN}
       - EMAIL=${EMAIL}
-      - CERT=/etc/letsencrypt/live/${DOMAIN}
     volumes:
       - website-data:/var/www/:ro
       - certificates:/etc/letsencrypt/
       - acme-challenge:/var/www-acme-challenge/
+    logging:
+      driver: "json-file"
+      options:
+          max-file: 5
+          max-size: 10m
   nginx:
     image: ebonetti/tatic
     restart: unless-stopped
@@ -23,6 +27,11 @@ services:
       - website-data:/var/www/:ro
       - certificates:/etc/letsencrypt/:ro
       - acme-challenge:/var/www-acme-challenge/:ro
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 5
+            max-size: 10m
     ports:
       - 80:80
       - 443:443

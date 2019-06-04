@@ -11,9 +11,11 @@ function template2conf {
     envsubst '$example_com,$example__com,$ssl_certificate,$ssl_certificate_key' < /etc/nginx/conf.d/templates/$1 > $CONFIG;
 }
 
+
 if [ -f "$CERT/fullchain.pem" ] && [ -f "$CERT/privkey.pem" ]; then
     template2conf static.conf
 else
+    #If there are no certificates, use a dummy server to obtain them.
     template2conf dummy.conf
 fi;
 
@@ -21,9 +23,10 @@ if [ "$1" = 'nginx' ]; then
     while [ ! -f "$CERT/fullchain.pem" ] || [ ! -f "$CERT/privkey.pem" ]; do
         sleep 1;
     done;
-    template2conf static.conf
-    nginx -s reload;
+    template2conf static.conf;
+    nginx -s reload > /dev/null 2>1 || true;
 
+    #Monitor changes in certificates
     inotifywait -qm -e modify -e close_write -e move -e move_self -e create $CERT | while read -s; do
     while read -s -t 10; do :; done;
         if [ -f "$CERT/fullchain.pem" ] && [ -f "$CERT/privkey.pem" ]; then
