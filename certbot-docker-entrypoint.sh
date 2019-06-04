@@ -8,6 +8,18 @@ if [ -n '"$@"' ]; then
     exec "$@";
 fi;
 
+#Check environvent variables
+if [ -z "$DOMAIN" ]
+then
+    echo "No domain specified";
+    exit 1;
+fi
+if [ -z "$EMAIL" ]
+then
+    echo "No email specified";
+    exit 1;
+fi
+
 function certbot_certonly {
   domains="$DOMAIN"
   for sub in $(ls /var/www/); do

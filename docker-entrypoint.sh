@@ -3,6 +3,24 @@ set -Eeuo pipefail
 
 trap "exit 1;" SIGINT SIGTERM
 
+if [ -z "$DOMAIN" ]
+then
+    echo "No domain specified, use the DOMAIN variable: docker run -e DOMAIN=example.com ...";
+    exit;
+fi
+
+#Check environvent variables
+if [ -z "$DOMAIN" ]
+then
+    echo "No domain specified";
+    exit 1;
+fi
+if [ -z "$CERT" ]
+then
+    echo "No certificate path specified";
+    exit 1;
+fi
+
 #Generate config from template
 CONFIG=/etc/nginx/conf.d/default.conf
 
