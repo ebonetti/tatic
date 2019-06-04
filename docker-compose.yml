@@ -15,8 +15,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-file: 5
-          max-size: 10m
+        max-size: "5k"
+        max-file: "10"
   nginx:
     image: ebonetti/tatic
     restart: unless-stopped
@@ -27,14 +27,14 @@ services:
       - website-data:/var/www/:ro
       - certificates:/etc/letsencrypt/:ro
       - acme-challenge:/var/www-acme-challenge/:ro
-    logging:
-        driver: "json-file"
-        options:
-            max-file: 5
-            max-size: 10m
     ports:
       - 80:80
       - 443:443
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
 volumes:
   certificates:
   acme-challenge:

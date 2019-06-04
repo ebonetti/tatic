@@ -29,4 +29,6 @@ done &
 
 certbot_certonly;
 
-while :; do sleep 12h; certbot renew; done;
+while :; do sleep 12h; certbot renew; done &
+
+wait;

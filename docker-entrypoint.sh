@@ -20,11 +20,11 @@ else
 fi;
 
 if [ "$1" = 'nginx' ]; then
-    while [ ! -f "$CERT/fullchain.pem" ] || [ ! -f "$CERT/privkey.pem" ]; do
+    while [ ! -f "$CERT/fullchain.pem" ] || [ ! -f "$CERT/privkey.pem" ] || [ ! -e /var/run/nginx.pid ]; do
         sleep 1;
     done;
     template2conf static.conf;
-    nginx -s reload > /dev/null 2>1 || true;
+    nginx -s reload;
 
     #Monitor changes in certificates
     inotifywait -qm -e modify -e close_write -e move -e move_self -e create $CERT | while read -s; do
