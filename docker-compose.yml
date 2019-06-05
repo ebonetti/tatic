@@ -2,7 +2,7 @@ version: '3'
 services:
   certbot:
     image: ebonetti/certbot-integration
-    container_name: certbot_integration
+    container_name: certbot
     restart: unless-stopped
     environment:
       - DOMAIN=${DOMAIN}
@@ -18,7 +18,7 @@ services:
         max-file: "10"
   nginx:
     image: ebonetti/tatic
-    container_name: nginx_server
+    container_name: nginx
     restart: unless-stopped
     environment:
       - DOMAIN=${DOMAIN}
